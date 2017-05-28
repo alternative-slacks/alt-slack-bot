@@ -1,0 +1,16 @@
+{
+  "name": "hello-human-bot",
+  "version": "0.0.1",
+  "description": "bot",
+  "main": "index.js",
+  "dependencies": {
+    "botpress": "0.x",
+    "botpress-slack": "^1.0.21"
+  },
+  "scripts": {
+    "start": "botpress start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "@mbabaian and @pompan129",
+  "license": "Botpress Proprietary License"
+}
