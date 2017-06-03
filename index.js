@@ -42,9 +42,12 @@ module.exports = function(bp) {
        + "URL: \n Category: \n"
        + "Political Alignment: \n")
  })
+}
+
+
 
  // loop through data to grab the publication or URL in user query
-
+/*
  for (var i = 0; i < data.length; i++) {
 
       const getPublicationRegex = /^get (.+)/i
@@ -59,3 +62,4 @@ module.exports = function(bp) {
 
 
 }
+*/
