@@ -53,6 +53,11 @@ module.exports = function(bp) {
  })
 
 
+ bp.hear({ platform: 'slack', type: 'message', text: '/test' }, (event, next) => {
+ bp.slack.sendText(event.channel.id, "TEST_WORKS!!")
+ })
+
+
 
 
 }
