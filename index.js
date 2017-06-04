@@ -44,6 +44,17 @@ module.exports = function(bp) {
  })
 }
 
+bp.hear({ platform: 'slack', type: 'message', text: 'alt_url' }, (event, next) => {
+bp.slack.sendText(event.channel.id, "URL-TEST");
+})
+}
+
+bp.hear({ platform: 'slack', type: 'message', text: 'alt_site' }, (event, next) => {
+bp.slack.sendText(event.channel.id, "URL-TEST");
+})
+}
+
+
 
 
  // loop through data to grab the publication or URL in user query
