@@ -42,17 +42,25 @@ module.exports = function(bp) {
        + "URL: \n Category: \n"
        + "Political Alignment: \n")
  })
+
+ bp.hear({ platform: 'slack', type: 'message', text: 'alt-site' }, (event, next) => {
+ bp.slack.sendText(event.channel.id, "ALT-SITE-TEST")
+ })
+
+
+ bp.hear({ platform: 'slack', type: 'message', text: 'alt-url' }, (event, next) => {
+ bp.slack.sendText(event.channel.id, "ALT-URL-TEST")
+ })
+
+
+
+
 }
 
-bp.hear({ platform: 'slack', type: 'message', text: 'alt_url' }, (event, next) => {
-bp.slack.sendText(event.channel.id, "URL-TEST");
-})
-}
 
-bp.hear({ platform: 'slack', type: 'message', text: 'alt_site' }, (event, next) => {
-bp.slack.sendText(event.channel.id, "URL-TEST");
-})
-}
+
+
+
 
 
 
