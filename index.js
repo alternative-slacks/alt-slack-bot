@@ -104,7 +104,7 @@ module.exports = function(bp) {
     let URL=text.toLowerCase().substring(1,text.length-1);//remove carrots included by Slack ie. '<http://someplace.org>'
     console.log("text",text);//todo
 
-    URL = url.parse(text);
+    URL = url.parse(URL);
     console.log("URL",URL);//todo
 
   NewsSite.find({hostname:new RegExp('^'+URL.hostname+'$', "i")},function(err,site){
@@ -113,11 +113,12 @@ module.exports = function(bp) {
       bp.slack.sendText(event.channel.id, "error: could not retrieve News Site");
       return;
     }
+    console.log("site",site);
     if(site.length === 0){
       bp.slack.sendText(event.channel.id, `We could not find any Fake News sites with that ID "${text}"`);
       return;
     }
-    console.log(site)
+
     bp.slack.sendText(event.channel.id, `We found ${site[0].title}, it's ${site[0].category}`)
 
   })
