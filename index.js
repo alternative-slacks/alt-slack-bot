@@ -1,17 +1,34 @@
+const url = require('url');
+
+//set up database
+var mongoose = require('mongoose');
+//mongodb://<dbuser>:<dbpassword>@ds155961.mlab.com:55961/alt-slacks-bot
+console.log("connecting to mongoDB","altSlack","altslack123" );// we're connected!
+mongoose.connect("mongodb://fazbat:pass2964@ds155961.mlab.com:55961/alt-slacks-bot");
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("connected to mongoDB");// we're connected!
+});
+
+var NewsSite = require("./models/news-site");//news site model for mongodb/mongoose
+
+
 module.exports = function(bp) {
   bp.middlewares.load()
 
   var query = " ";
 
   bp.hear({ platform: 'slack', type: 'message', text: 'hello'}, (event, next) => {
- bp.slack.sendText(event.channel.id, "Welcome! I'm the fake news bot."
-   + " Type 'menu' to get a list of my commands.")
-})
+   bp.slack.sendText(event.channel.id, `Hello ${event.user.name}! I'm the fake news bot.
+     Type 'menu' to get a list of my commands.`)
+  })
 
  bp.hear({ platform: 'slack', type: 'message', text: 'menu' }, (event, next) => {
  bp.slack.sendText(event.channel.id, "Here is a list of my commands: \n*menu*"
-   + "\t\tlists commands\n*get* <publication name>"
-   +"\t\tprovides information about a publication\n*get* "
+   + "\t\tlists commands\n*alt-title* <publication name>"
+   +"\t\tprovides information about a publication\n*alt-url* "
    + "<URL>\t\t find information about a fake news URL\n"
    + "*help*\t\tprovides information about how to use the fake news bot\n")
  })
@@ -34,56 +51,97 @@ module.exports = function(bp) {
  bp.slack.sendText(event.channel.id, "You're quite welcome! :slight smile:")
  })
 
- // for testing purposes only. when actually using it as fake-news-bot, reactivate following
- // command and for loop.
-
  bp.hear({ platform: 'slack', type: 'message', text: 'get' }, (event, next) => {
  bp.slack.sendText(event.channel.id, "Publication title: \n"
        + "URL: \n Category: \n"
        + "Political Alignment: \n")
  })
 
- bp.hear({ platform: 'slack', type: 'message', text: 'alt-site' }, (event, next) => {
- bp.slack.sendText(event.channel.id, "ALT-SITE-TEST")
+
+ bp.hear({ platform: 'slack', type: 'message', text: /^alt-title(.*)/ig }, (event, next) => {
+    console.log("name",event.user.name);
+    console.log("name",event.text);
+
+    //remove command
+    let text = event.text;
+    text = text.substr(9).trim();
+
+    //error if no search criteria
+    if(text.length === 0){
+      bp.slack.sendText(event.channel.id, "Oops! You need to give me a title!");
+    }
+
+    text=text.toLowerCase();
+    console.log("text",text);
+
+  NewsSite.find({title:new RegExp('^'+text+'$', "i")},function(err,site){
+    if(err){
+      console.log(err);
+      bp.slack.sendText(event.channel.id, "error: could not retrieve News Site");
+      return;
+    }
+    console.log(site)
+    bp.slack.sendText(event.channel.id, `We found ${site[0].title}, it's ${site[0].category}`)
+
+  })
+
+
  })
 
+ bp.hear({ platform: 'slack', type: 'message', text: /^alt-url(.*)/ig }, (event, next) => {
+    console.log("name",event.user.name);
+    console.log("text",event.text);
 
- bp.hear({ platform: 'slack', type: 'message', text: 'alt-url' }, (event, next) => {
- bp.slack.sendText(event.channel.id, "ALT-URL-TEST")
+    //remove command
+    let text = event.text;
+    text = text.substr(8).trim();
+
+    //error if no search criteria
+    if(text.length === 0){
+      bp.slack.sendText(event.channel.id, "Oops! You need to give me a URL!");
+    }
+
+    let URL=text.toLowerCase().substring(1,text.length-1);//remove carrots included by Slack ie. '<http://someplace.org>'
+    console.log("text",text);//todo
+
+    URL = url.parse(text);
+    console.log("URL",URL);//todo
+
+  NewsSite.find({hostname:new RegExp('^'+URL.hostname+'$', "i")},function(err,site){
+    if(err){
+      console.log(err);
+      bp.slack.sendText(event.channel.id, "error: could not retrieve News Site");
+      return;
+    }
+    if(site.length === 0){
+      bp.slack.sendText(event.channel.id, `We could not find any Fake News sites with that ID "${text}"`);
+      return;
+    }
+    console.log(site)
+    bp.slack.sendText(event.channel.id, `We found ${site[0].title}, it's ${site[0].category}`)
+
+  })
+
+
  })
 
-
- bp.hear({ platform: 'slack', type: 'message', text: 'test' }, (event, next) => {
- bp.slack.sendText(event.channel.id, "TEST_WORKS!!")
- })
-
-
-
-
-}
-
-
-
-
-
-
-
-
-
- // loop through data to grab the publication or URL in user query
 /*
- for (var i = 0; i < data.length; i++) {
+//testing route
+ bp.hear({ platform: 'slack', type: 'message', text: /^alt-test(.*)/ig }, (event, next) => {
+    console.log("name",event.user.name);
+    console.log("name",event.text);
 
-      const getPublicationRegex = /^get (.+)/i
-      bp.hear({ platform: 'slack', type: 'message', text: getPublicationRegex }, (event, next) => {
-      const [__, publication] = getPublicationRegex.exec(event.text)
-
-        bp.slack.sendText(event.channel.id, "Publication title: " + data.siteTitle[i] + "\n"
-        + "URL: " + data.siteUrl[i] + "\n Category: " + data.siteCategory[i] + "\n"
-        + "Political Alignment: " + data.sitePoliticalAlignment[i] + "\n")
-
-    })
+    bp.slack.sendText(event.channel.id, `TEST: "${event.text}"`);
 
 
-}
+ })
+
+ //testing route
+  bp.hear({ platform: 'slack',type: 'message'}, (event, next) => {
+     console.log("GENERAL-TEST");
+     console.log(event.text);
+     console.log(event.type);
+
+  })
 */
+}
