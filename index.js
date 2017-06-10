@@ -63,7 +63,13 @@ module.exports = function(bp) {
       bp.slack.sendText(event.channel.id, "Error: Could not retrieve News Site.");
       return;
     }
-    console.log(site)
+    console.log(site)//todo
+
+    if(site.length === 0){
+      bp.slack.sendText(event.channel.id, `We could not find any fake news sites with the ID "${text}."`);
+      return;
+    }
+
     bp.slack.sendText(event.channel.id,
       `We found *${site[0].title}*: \n`+
       `*Category*: ${site[0].category}\n` +
@@ -72,8 +78,6 @@ module.exports = function(bp) {
     )
 
   })
-
-
  })
 
  bp.hear({ platform: 'slack', type: 'message', text: /^alt-url(.*)/ig }, (event, next) => {
