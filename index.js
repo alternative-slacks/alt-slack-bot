@@ -37,7 +37,7 @@ module.exports = function(bp) {
  bp.hear({ platform: 'slack', type: 'message', text: 'help' }, (event, next) => {
  bp.slack.sendText(event.channel.id, "I have a database of over 400 fake news websites"
    + " to provide you with information about a fake news site and its"
-   + " alignment. To search by site title, type 'alt-slack' followed by the name."
+   + " alignment. To search by site title, type 'alt-title' followed by the name."
    + " of the site. To search by URL, type 'alt-url' followed by the index URL.")
  })
 
@@ -112,7 +112,7 @@ module.exports = function(bp) {
       `*Category*: ${site[0].category}\n` +
       `*Political alignment*: ${site[0].politicalAlignment}\n`  +//put code for alignment here
       `*Website URL*: ${site[0].url}\n`//code for URL
-    )   
+    )
 
   })
 
