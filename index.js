@@ -37,7 +37,7 @@ module.exports = function(bp) {
  bp.hear({ platform: 'slack', type: 'message', text: 'help' }, (event, next) => {
  bp.slack.sendText(event.channel.id, "I have a database of over 400 fake news websites"
    + " to provide you with information about a fake news site and its"
-   + " alignment. To search by site title, type 'alt-slack' followed by the name."
+   + " alignment. To search by site title, type 'alt-site' followed by the name."
    + " of the site. To search by URL, type 'alt-url' followed by the index URL.")
  })
 
