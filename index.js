@@ -64,9 +64,12 @@ module.exports = function(bp) {
       return;
     }
     console.log(site)
-    bp.slack.sendText(event.channel.id, `We found ${site[0].title}: \n`
-    + `*Category*: ${site[0].category}\n` + `*Political alignment*:\n`  //put code for alignment here
-      + `*Website URL*: \n`//code for URL)
+    bp.slack.sendText(event.channel.id,
+      `We found *${site[0].title}*: \n`+
+      `*Category*: ${site[0].category}\n` +
+      `*Political alignment*: ${site[0].politicalAlignment}\n`  +//put code for alignment here
+      `*Website URL*: ${site[0].url}\n`//code for URL
+    )
 
   })
 
@@ -104,9 +107,12 @@ module.exports = function(bp) {
       return;
     }
 
-    bp.slack.sendText(event.channel.id, `We found ${site[0].title}: \n`
-    + `*Category*: ${site[0].category}\n` + `*Political alignment*:\n`  //put code for alignment here
-      + `*Website URL*: \n`)//code for URL)
+    bp.slack.sendText(event.channel.id,
+      `We found *${site[0].title}*: \n`+
+      `*Category*: ${site[0].category}\n` +
+      `*Political alignment*: ${site[0].politicalAlignment}\n`  +//put code for alignment here
+      `*Website URL*: ${site[0].url}\n`//code for URL
+    )   
 
   })
 
