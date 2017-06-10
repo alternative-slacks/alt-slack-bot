@@ -1,11 +1,6 @@
 # bot
 
-Chingu Walrus cohort project
+Slack bot that retrieves information about fake news sites. 
 
-This bot takes input from the user and provides feedback on fake news sources. 
+http://alternative-slacks.github.io
 
-Commands:
-get <publication title>   search fake news sources by title
-get <URL>    search fake news sources by URL
-help  information about how to use the fake news bot
-menu  lists commands
